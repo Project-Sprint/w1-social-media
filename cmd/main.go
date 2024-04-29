@@ -35,7 +35,7 @@ func main() {
 	userRepository := repository.NewUserRepository(db)
 
 	// define service
-	userService := service.NewUserService(*userRepository)
+	userService := service.NewUserService(userRepository)
 
 	app := fiber.New()
 	apiV1 := app.Group("/api/v1")

@@ -1,11 +1,19 @@
 package service
 
-import "github.com/Project-Sprint/w1-social-media/repository"
+import (
+	"context"
+
+	"github.com/Project-Sprint/w1-social-media/model"
+)
 
 type UserService struct {
-	userRepository repository.UserRepository
+	userRepository UserRepository
 }
 
-func NewUserService(userRepo repository.UserRepository) *UserService {
+func NewUserService(userRepo UserRepository) *UserService {
 	return &UserService{userRepository: userRepo}
+}
+
+func (s *UserService) Register(ctx context.Context, user model.User) error {
+	return nil
 }
