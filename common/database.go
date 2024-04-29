@@ -15,11 +15,11 @@ func ConnectToSQL() *sql.DB {
 	user := os.Getenv("DB_USER")
 	password := os.Getenv("DB_PASSWORD")
 	dbname := os.Getenv("DB_NAME")
-	sllMode := os.Getenv("DB_SSLMODE")
+	dbParams := os.Getenv("DB_PARAMS")
 
 	log.Printf("connecting to pgsql database=%s", host)
-	datasource := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
-		host, port, user, password, dbname, sllMode)
+	datasource := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s %s",
+		host, port, user, password, dbname, dbParams)
 
 	db, err := sql.Open("postgres", datasource)
 	if err != nil {
