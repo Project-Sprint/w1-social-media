@@ -14,6 +14,6 @@ func NewMatchService(repo MatchRepository) *MatchService {
 	return &MatchService{matchRepository: repo}
 }
 
-func (s *MatchService) CreateMatch(ctx context.Context, user model.User) error {
+func (s *MatchService) PostMatch(ctx context.Context, user model.User) error {
 	return nil
 }
