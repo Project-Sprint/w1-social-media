@@ -9,3 +9,6 @@ import (
 type UserRepository interface {
 	Insert(ctx context.Context, user model.User) error
 }
+
+type MatchRepository interface {
+}

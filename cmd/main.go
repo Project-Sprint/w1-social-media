@@ -33,9 +33,11 @@ func main() {
 
 	// define repository
 	userRepository := repository.NewUserRepository(db)
+	matchRepository := repository.NewMatchRepository(db)
 
 	// define service
 	userService := service.NewUserService(userRepository)
+	matchService := service.NewMatchService(matchRepository)
 
 	app := fiber.New()
 	apiV1 := app.Group("/api/v1")
@@ -47,6 +49,11 @@ func main() {
 	// api/v1/user handler
 	userRoutes := apiV1.Group("/user")
 	userRoutes.Post("/register", rest.UserRegisterHandler(userService))
+
+	matchRoutes := apiV1.Group("/match")
+	matchRoutes.Post("/", rest.PostMatchHandler(matchService))
+	matchRoutes.Post("/approve", rest.ApproveMatchHandler(matchService))
+	matchRoutes.Post("/reject", rest.RejectMatchHandler(matchService))
 
 	fmt.Println("Listening on Port: ", PORT)
 	if err := app.Listen(fmt.Sprintf(":%s", PORT)); err != nil {
