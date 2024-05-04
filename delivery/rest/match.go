@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -46,8 +45,6 @@ func PostMatchHandler(matchInterface MatchService) fiber.Handler {
 				errResp = err
 				statusCode = 400
 			}
-
-			fmt.Println(err, "<<<<")
 
 			resp = model.HTTPResponse{
 				Message: errResp.Error(),

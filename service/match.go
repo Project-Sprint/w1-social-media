@@ -52,13 +52,6 @@ func (s *MatchService) PostMatch(ctx context.Context, body model.RequestMatch) e
 		return ErrSameOwner
 	}
 
-	//    int       `json:"matchCatId"`
-	// UserCatId    int       `json:"userCatId"`
-	// UserId       int       `json:"userId"`
-	// TargetUserId int       `json:"targetUserId"`
-	// Message      string    `json:"message"`
-	// CreatedAt    time.Time `json:"createdAt"`
-
 	match := model.Match{
 		MatchCatId:   targetCat.Id,
 		UserCatId:    ourCat.Id,
