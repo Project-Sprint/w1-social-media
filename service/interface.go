@@ -11,4 +11,6 @@ type UserRepository interface {
 }
 
 type MatchRepository interface {
+	Insert(ctx context.Context, in model.Match) (interface{}, error)
+	FindCatById(ctx context.Context, catId int) (model.Cats, error)
 }

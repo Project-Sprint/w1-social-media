@@ -19,9 +19,21 @@ func (r *MatchRepository) Insert(ctx context.Context, in model.Match) (interface
 	query := `
 		INSERT INTO matchs (matchCatId, userCatId, userId, targetUserId, message, createdAt)
 		VALUES ($1, $2, $3, $4, $5, $6)
+
 	`
 
-	result, err := r.db.ExecContext(ctx, query, in.MatchCatId, in.UserCatId, in.UserId, in.TargetUserId, in.Message, in.CreatedAt)
+	_, err := r.db.ExecContext(ctx, query, in.MatchCatId, in.UserCatId, in.UserId, in.TargetUserId, in.Message, in.CreatedAt)
+	if err != nil {
+		return nil, err
+	}
+
+	query = `
+		UPDATE cats
+		SET hasMatched = true
+		WHERE id IN ($1, $2)
+	`
+
+	result, err := r.db.ExecContext(ctx, query, in.MatchCatId, in.UserCatId)
 	if err != nil {
 		return nil, err
 	}
