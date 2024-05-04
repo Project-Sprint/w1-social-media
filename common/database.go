@@ -9,7 +9,9 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func ConnectToSQL() *sql.DB {
+var DB *sql.DB
+
+func ConnectToSQL() *sql.DB{
 	host := os.Getenv("DB_HOST")
 	port := os.Getenv("DB_PORT")
 	user := os.Getenv("DB_USER")
@@ -31,7 +33,7 @@ func ConnectToSQL() *sql.DB {
 		log.Fatalf("ping to db %s failed: %v", host, err)
 		return nil
 	}
-
+	
 	log.Printf("success connected to db %s (%s:%s) ...", dbname, host, port)
 	return db
 }
