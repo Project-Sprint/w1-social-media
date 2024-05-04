@@ -27,17 +27,6 @@ func (r *MatchRepository) Insert(ctx context.Context, in model.Match) (interface
 		return nil, err
 	}
 
-	// query = `
-	// 	UPDATE cats
-	// 	SET hasMatched = true
-	// 	WHERE id IN ($1, $2)
-	// `
-
-	// result, err := r.db.ExecContext(ctx, query, in.MatchCatId, in.UserCatId)
-	// if err != nil {
-	// 	return nil, err
-	// }
-
 	return result, nil
 }
 
@@ -56,28 +45,44 @@ func (r *MatchRepository) FindCatById(ctx context.Context, catId int) (model.Cat
 	return cat, nil
 }
 
-func (r *MatchRepository) Approve(ctx context.Context, in model.RequestMatchApprove) (interface{}, error) {
-	// query := `
-	// 	INSERT INTO matchs (matchCatId, userCatId, userId, targetUserId, message, createdAt)
-	// 	VALUES ($1, $2, $3, $4, $5, $6)
-	// `
+func (r *MatchRepository) Approve(ctx context.Context, in model.Match) error {
 
-	// result, err := r.db.ExecContext(ctx, query, in.MatchCatId, in.UserCatId, in.UserId, in.TargetUserId, in.Message, in.CreatedAt)
-	// if err != nil {
-	// 	return nil, err
-	// }
+	query := `
+		DELETE FROM matchs
+		WHERE ((matchCatId = $1 AND userCatId = $2) OR (matchCatId = $2 AND userCatId = $1))
+		AND id != $3;
+	`
 
-	// // query = `
-	// // 	UPDATE cats
-	// // 	SET hasMatched = true
-	// // 	WHERE id IN ($1, $2)
-	// // `
+	_, err := r.db.ExecContext(ctx, query, in.MatchCatId, in.UserCatId, in.Id)
+	if err != nil {
+		return err
+	}
 
-	// // result, err := r.db.ExecContext(ctx, query, in.MatchCatId, in.UserCatId)
-	// // if err != nil {
-	// // 	return nil, err
-	// // }
+	query = `
+		UPDATE cats
+		SET hasMatched = true
+		WHERE id IN ($1, $2)
+	`
 
-	// return result, nil
-	return nil, nil
+	_, err = r.db.ExecContext(ctx, query, in.MatchCatId, in.UserCatId)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *MatchRepository) FindMatchById(ctx context.Context, in model.RequestMatchApprove) (model.Match, error) {
+	query := `
+		SELECT id, matchCatId, userCatId, userId, targetUserId, message, createdAt
+		FROM matchs
+		WHERE id = $1
+	`
+
+	var match model.Match
+	if err := r.db.QueryRowContext(ctx, query, in.MatchId).Scan(&match.Id, &match.MatchCatId, &match.UserCatId, &match.UserId, &match.TargetUserId, &match.Message, &match.CreatedAt); err != nil {
+		return match, err
+	}
+
+	return match, nil
 }

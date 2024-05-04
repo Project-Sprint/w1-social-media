@@ -68,3 +68,16 @@ func (s *MatchService) PostMatch(ctx context.Context, body model.RequestMatch) e
 
 	return nil
 }
+
+func (s *MatchService) ApproveMatch(ctx context.Context, body model.RequestMatchApprove) error {
+	res, err := s.matchRepository.FindMatchById(ctx, body)
+	if err != nil {
+		return err
+	}
+
+	if err := s.matchRepository.Approve(ctx, res); err != nil {
+		return err
+	}
+
+	return nil
+}

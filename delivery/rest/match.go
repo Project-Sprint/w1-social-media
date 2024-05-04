@@ -64,7 +64,28 @@ func PostMatchHandler(matchInterface MatchService) fiber.Handler {
 func ApproveMatchHandler(matchInterface MatchService) fiber.Handler {
 
 	return func(c *fiber.Ctx) error {
-		return c.Status(http.StatusCreated).JSON(model.HTTPResponse{
+		var body model.RequestMatchApprove
+		c.BodyParser(&body)
+
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		defer cancel()
+
+		if err := matchInterface.ApproveMatch(ctx, body); err != nil {
+
+			if err == sql.ErrNoRows {
+				return c.Status(http.StatusNotFound).JSON(model.HTTPResponse{
+					Message: err.Error(),
+					Data:    nil,
+				})
+			}
+
+			return c.Status(http.StatusInternalServerError).JSON(model.HTTPResponse{
+				Message: err.Error(),
+				Data:    nil,
+			})
+		}
+
+		return c.Status(http.StatusOK).JSON(model.HTTPResponse{
 			Message: "success approving",
 			Data:    nil,
 		})

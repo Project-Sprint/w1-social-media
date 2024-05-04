@@ -12,4 +12,5 @@ type UserService interface {
 
 type MatchService interface {
 	PostMatch(ctx context.Context, body model.RequestMatch) error
+	ApproveMatch(ctx context.Context, body model.RequestMatchApprove) error
 }
