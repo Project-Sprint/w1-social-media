@@ -5,3 +5,7 @@ type RequestMatch struct {
 	UserCatId  int    `json:"userCatId"`
 	Message    string `json:"message"`
 }
+
+type RequestMatchApprove struct {
+	MatchId int `json:"matchId"`
+}

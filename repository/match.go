@@ -22,21 +22,21 @@ func (r *MatchRepository) Insert(ctx context.Context, in model.Match) (interface
 
 	`
 
-	_, err := r.db.ExecContext(ctx, query, in.MatchCatId, in.UserCatId, in.UserId, in.TargetUserId, in.Message, in.CreatedAt)
+	result, err := r.db.ExecContext(ctx, query, in.MatchCatId, in.UserCatId, in.UserId, in.TargetUserId, in.Message, in.CreatedAt)
 	if err != nil {
 		return nil, err
 	}
 
-	query = `
-		UPDATE cats
-		SET hasMatched = true
-		WHERE id IN ($1, $2)
-	`
+	// query = `
+	// 	UPDATE cats
+	// 	SET hasMatched = true
+	// 	WHERE id IN ($1, $2)
+	// `
 
-	result, err := r.db.ExecContext(ctx, query, in.MatchCatId, in.UserCatId)
-	if err != nil {
-		return nil, err
-	}
+	// result, err := r.db.ExecContext(ctx, query, in.MatchCatId, in.UserCatId)
+	// if err != nil {
+	// 	return nil, err
+	// }
 
 	return result, nil
 }
@@ -54,4 +54,30 @@ func (r *MatchRepository) FindCatById(ctx context.Context, catId int) (model.Cat
 	}
 
 	return cat, nil
+}
+
+func (r *MatchRepository) Approve(ctx context.Context, in model.RequestMatchApprove) (interface{}, error) {
+	// query := `
+	// 	INSERT INTO matchs (matchCatId, userCatId, userId, targetUserId, message, createdAt)
+	// 	VALUES ($1, $2, $3, $4, $5, $6)
+	// `
+
+	// result, err := r.db.ExecContext(ctx, query, in.MatchCatId, in.UserCatId, in.UserId, in.TargetUserId, in.Message, in.CreatedAt)
+	// if err != nil {
+	// 	return nil, err
+	// }
+
+	// // query = `
+	// // 	UPDATE cats
+	// // 	SET hasMatched = true
+	// // 	WHERE id IN ($1, $2)
+	// // `
+
+	// // result, err := r.db.ExecContext(ctx, query, in.MatchCatId, in.UserCatId)
+	// // if err != nil {
+	// // 	return nil, err
+	// // }
+
+	// return result, nil
+	return nil, nil
 }

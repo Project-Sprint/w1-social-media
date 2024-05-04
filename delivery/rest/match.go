@@ -62,8 +62,12 @@ func PostMatchHandler(matchInterface MatchService) fiber.Handler {
 }
 
 func ApproveMatchHandler(matchInterface MatchService) fiber.Handler {
+
 	return func(c *fiber.Ctx) error {
-		return c.SendString("Hello, Match Approve!")
+		return c.Status(http.StatusCreated).JSON(model.HTTPResponse{
+			Message: "success approving",
+			Data:    nil,
+		})
 	}
 }
 
