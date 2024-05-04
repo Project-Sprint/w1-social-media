@@ -9,3 +9,7 @@ import (
 type UserService interface {
 	Register(ctx context.Context, user model.User) error
 }
+
+type MatchService interface {
+	PostMatch(ctx context.Context, body model.RequestMatch) error
+}
