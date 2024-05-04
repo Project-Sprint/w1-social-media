@@ -33,10 +33,12 @@ func main() {
 
 	// define repository
 	userRepository := repository.NewUserRepository(db)
+	catRepository := repository.NewCatRepository(db)
 	matchRepository := repository.NewMatchRepository(db)
 
 	// define service
 	userService := service.NewUserService(userRepository)
+	catService := service.NewCatService(catRepository)
 	matchService := service.NewMatchService(matchRepository)
 
 	app := fiber.New()
@@ -50,6 +52,9 @@ func main() {
 	userRoutes := apiV1.Group("/user")
 	userRoutes.Post("/register", rest.UserRegisterHandler(userService))
 
+	catRoutes := apiV1.Group("/cat")
+	catRoutes.Post("/", rest.PostCatHandler(catService))
+
 	matchRoutes := apiV1.Group("/match")
 	matchRoutes.Post("/", rest.PostMatchHandler(matchService))
 	matchRoutes.Post("/approve", rest.ApproveMatchHandler(matchService))
@@ -57,6 +62,7 @@ func main() {
 
 	fmt.Println("Listening on Port: ", PORT)
 	if err := app.Listen(fmt.Sprintf(":%s", PORT)); err != nil {
+		fmt.Println(err)
 		log.Fatalf("Failed Listening Port: %s\n", PORT)
 	}
 }
